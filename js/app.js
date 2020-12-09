@@ -1,214 +1,151 @@
 'use strict';
 
+//constructor funtions are object "factories"
+var hours = ['6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm'];
+
+
 const listSeattle = document.getElementById('seattle');
 const listTokyo = document.getElementById('tokyo');
 const listDubai = document.getElementById('dubai');
 const listParis = document.getElementById('paris');
 const listLima = document.getElementById('lima');
+const storeTable = document.getElementById('table');
+let tbodyElement = '';
 
-var hours = ['6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm'];
+const cityStores = [];
 
-/* function randomNumber(min, max) {
+function Citystore(name, min, max, avg, parentList) {
+  this.name = name;
+  this.min = min;
+  this.max = max;
+  this.avg = avg;
+  this.parentList = parentList;
+  this.hourlySales = [];
+  this.dailyTotal = 0;
+  cityStores.push(this);
+}
 
-  return Math.floor(Math.random() * (max - min + 1) + min);
+Citystore.prototype.getRandomNumber = function () {
+  return Math.floor(Math.random() * (this.max - this.min + 1) + this.min);
+};
+
+Citystore.prototype.calculateHourlySales = function () {
+  //creating a loop to iterate and populate hourlySales
+  for (let i = 0; i < hours.length; i++) {
+    let x = this.hourlySales[i] = Math.trunc(this.getRandomNumber() * this.avg);
+    //adding the daily total.
+    this.dailyTotal += this.hourlySales[i];
+
+    return x;
+  }
+};
+Citystore.prototype.hoursCalc = function () {
+  this.hourlySales[0];
+  console.log(this.hourlySales[0]);
+};
+
+Citystore.prototype.renderTable = function () {
+  //create Row and append to the DOM
+
+  let trElement = document.createElement('tr');
+  tbodyElement.appendChild(trElement);
+
+  //create first column and append to the DOM
+  let thElement = document.createElement('th');
+  thElement.textContent = this.name;
+  trElement.appendChild(thElement);
+
+  //iterate through hourly totals and append to DOM
+  let tdElement;
+  for (let i = 0; i < hours.length; i++) {
+    tdElement = document.createElement('td');
+    tdElement.textContent = this.calculateHourlySales();
+    trElement.appendChild(tdElement);
+
+  }
+  //creating the daily totals column
+  tdElement = document.createElement('td');
+  tdElement.textContent = this.dailyTotal;
+  trElement.appendChild(tdElement);
+};
+
+
+function renderHeader() {
+
+  //creating the table head to sit inside table
+  let theadElement = document.createElement('thead');
+  storeTable.appendChild(theadElement);
+
+  //creating the table row to sit inside table head
+  let trElement = document.createElement('tr');
+  theadElement.appendChild(trElement);
+
+  //creating the th to go inside table row
+  let thElement = document.createElement('th');
+  thElement.textContent = '';
+  trElement.appendChild(thElement);
+
+  //for loop to iterate through the hours array
+  for (let i = 0; i < hours.length; i++) {
+    thElement = document.createElement('th');
+    thElement.textContent = hours[i];
+    trElement.appendChild(thElement);
+  }
+  // adding daily totals onto the end of the table
+  thElement = document.createElement('th');
+  thElement.textContent = 'Daily Total';
+  trElement.appendChild(thElement);
 
 }
 
-const myNumber = randomNumber(3, 5);
-console.log(myNumber); */
+//creating a body to for the table
+function renderBody() {
+  tbodyElement = document.createElement('tbody');
+  storeTable.appendChild(tbodyElement);
+}
 
-//create one for loop that processes the random numbers needed
-/* function calculator(arr) {
-  for (let i = 0; i < arr.length; i++)
-}; */
+//creating a foot for the table
+function renderFoot() {
+  let tfootElement = document.createElement('tfoot');
+  storeTable.appendChild(tfootElement);
 
-//first object literal
+  let trElement = document.createElement('tr');
+  tfootElement.appendChild(trElement);
 
-let seattleStore = {
-  name: 'Seattle',
-  minCustomer: 23,
-  maxCustomer: 65,
-  avgCookieSale: 6.3,
-  hourlySales: [],
-  dailyTotal: 0,
-  getRandomNumber: function () {
-    return Math.floor(Math.random() * (this.maxCustomer - this.minCustomer + 1) + this.minCustomer);
-  },
-  calculateHourlySales() {
-    console.log(`This is  the random number ${this.getRandomNumber()}`);
-    for (let i = 0; i < hours.length; i++) {
-      this.hourlySales[i] = Math.trunc(this.getRandomNumber() * this.avgCookieSale);
-      this.dailyTotal += this.hourlySales[i];
-    }
-  },
-  render: function () {
-    //this.calculateHourlySales();
-    console.log(`This is the hourly cookie sales ${this.calculateHourlySales()}`);
-    console.log(`Hourly sales array${this.hourlySales}`);
-    for (let i = 0; i < hours.length; i++) {
-      //create the element
-      const liElement = document.createElement('li');
-      //give it content
-      liElement.textContent = `${hours[i]} : ${this.hourlySales[i]}`;
-      //append the DOM
-      listSeattle.appendChild(liElement);
-    }
-    const liTotalElement = document.createElement('li');
-    liTotalElement.textContent = `Daily Total : $${this.dailyTotal}`;
-    //append the DOM
-    listSeattle.appendChild(liTotalElement);
+  let thElement = document.createElement('th');
+  thElement.textContent = 'Hourly Totals';
+  trElement.appendChild(thElement);
+
+  let tdElement = document.createElement('td');
+  //tdElement.textContent = calculateHourlySales();
+  trElement.appendChild(tdElement);
+}
+
+//instaniations
+new Citystore('Seattle', 23, 65, 6.3, listSeattle);
+new Citystore('Tokyo', 3, 24, 1.2, listTokyo);
+new Citystore('Dubai', 11, 38, 3.7, listDubai);
+new Citystore('Paris', 20, 38, 2.3, listParis);
+new Citystore('Lima', 2, 16, 4.6, listLima);
+
+
+function renderAll() {
+  for (let i = 0; i < cityStores.length; i++) {
+    cityStores[i].renderTable();
   }
-};
+}
 
-let tokyoStore = {
-  name: 'Tokyo',
-  minCustomer: 3,
-  maxCustomer: 24,
-  avgCookieSale: 1.2,
-  hourlySales: [],
-  dailyTotal: 0,
-  getRandomNumber: function () {
-    return Math.floor(Math.random() * (this.maxCustomer - this.minCustomer + 1) + this.minCustomer);
-  },
-  calculateHourlySales() {
-    console.log(`This is  the random number ${this.getRandomNumber()}`);
-    for (let i = 0; i < hours.length; i++) {
-      this.hourlySales[i] = Math.trunc(this.getRandomNumber() * this.avgCookieSale);
-      this.dailyTotal += this.hourlySales[i];
-    }
-  },
-  render: function () {
-    //this.calculateHourlySales();
-    console.log(`This is the hourly cookie sales ${this.calculateHourlySales()}`);
-    console.log(`Hourly sales array${this.hourlySales}`);
-    for (let i = 0; i < hours.length; i++) {
-      //create the element
-      const liElement = document.createElement('li');
-      //give it content
-      liElement.textContent = `${hours[i]} : ${this.hourlySales[i]}`;
-      //append the DOM
-      listTokyo.appendChild(liElement);
-    }
-    const liTotalElement = document.createElement('li');
-    liTotalElement.textContent = `Daily Total : $${this.dailyTotal}`;
-    //append the DOM
-    listTokyo.appendChild(liTotalElement);
-  }
-};
 
-let dubaiStore = {
-  name: 'dubai',
-  minCustomer: 11,
-  maxCustomer: 38,
-  avgCookieSale: 3.7,
-  hourlySales: [],
-  dailyTotal: 0,
-  getRandomNumber: function () {
-    return Math.floor(Math.random() * (this.maxCustomer - this.minCustomer + 1) + this.minCustomer);
-  },
-  calculateHourlySales() {
-    console.log(`This is  the random number ${this.getRandomNumber()}`);
-    for (let i = 0; i < hours.length; i++) {
-      this.hourlySales[i] = Math.trunc(this.getRandomNumber() * this.avgCookieSale);
-      this.dailyTotal += this.hourlySales[i];
-    }
-  },
-  render: function () {
-    //this.calculateHourlySales();
-    console.log(`This is the hourly cookie sales ${this.calculateHourlySales()}`);
-    console.log(`Hourly sales array${this.hourlySales}`);
-    for (let i = 0; i < hours.length; i++) {
-      //create the element
-      const liElement = document.createElement('li');
-      //give it content
-      liElement.textContent = `${hours[i]} : ${this.hourlySales[i]}`;
-      //append the DOM
-      listDubai.appendChild(liElement);
-    }
-    const liTotalElement = document.createElement('li');
-    liTotalElement.textContent = `Daily Total : $${this.dailyTotal}`;
-    //append the DOM
-    listDubai.appendChild(liTotalElement);
-  }
-};
+/* var hoursCalc = cityStores[0].hourlySales[0] + cityStores[1].hourlySales[0] + cityStores[2].hourlySales[0] + cityStores[3].hourlySales[0] + cityStores[4].hourlySales[0]; */
 
-let parisStore = {
-  name: 'Paris',
-  minCustomer: 20,
-  maxCustomer: 38,
-  avgCookieSale: 2.3,
-  hourlySales: [],
-  dailyTotal: 0,
-  getRandomNumber: function () {
-    return Math.floor(Math.random() * (this.maxCustomer - this.minCustomer + 1) + this.minCustomer);
-  },
-  calculateHourlySales() {
-    console.log(`This is  the random number ${this.getRandomNumber()}`);
-    for (let i = 0; i < hours.length; i++) {
-      this.hourlySales[i] = Math.trunc(this.getRandomNumber() * this.avgCookieSale);
-      this.dailyTotal += this.hourlySales[i];
-    }
-  },
-  render: function () {
-    //this.calculateHourlySales();
-    console.log(`This is the hourly cookie sales ${this.calculateHourlySales()}`);
-    console.log(`Hourly sales array${this.hourlySales}`);
-    for (let i = 0; i < hours.length; i++) {
-      //create the element
-      const liElement = document.createElement('li');
-      //give it content
-      liElement.textContent = `${hours[i]} : ${this.hourlySales[i]}`;
-      //append the DOM
-      listParis.appendChild(liElement);
-    }
-    const liTotalElement = document.createElement('li');
-    liTotalElement.textContent = `Daily Total : $${this.dailyTotal}`;
-    //append the DOM
-    listParis.appendChild(liTotalElement);
-  }
-};
+const test = cityStores[0].hourlySales[0];
 
-let limaStore = {
-  name: 'Lima',
-  minCustomer: 2,
-  maxCustomer: 16,
-  avgCookieSale: 4.6,
-  hourlySales: [],
-  dailyTotal: 0,
-  getRandomNumber: function () {
-    return Math.floor(Math.random() * (this.maxCustomer - this.minCustomer + 1) + this.minCustomer);
-  },
-  calculateHourlySales() {
-    console.log(`This is  the random number ${this.getRandomNumber()}`);
-    for (let i = 0; i < hours.length; i++) {
-      this.hourlySales[i] = Math.trunc(this.getRandomNumber() * this.avgCookieSale);
-      this.dailyTotal += this.hourlySales[i];
-    }
-  },
-  render: function () {
-    //this.calculateHourlySales();
-    console.log(`This is the hourly cookie sales ${this.calculateHourlySales()}`);
-    console.log(`Hourly sales array${this.hourlySales}`);
-    for (let i = 0; i < hours.length; i++) {
-      //create the element
-      const liElement = document.createElement('li');
-      //give it content
-      liElement.textContent = `${hours[i]} : ${this.hourlySales[i]}`;
-      //append the DOM
-      listLima.appendChild(liElement);
-    }
-    const liTotalElement = document.createElement('li');
-    liTotalElement.textContent = `Daily Total : $${this.dailyTotal}`;
-    //append the DOM
-    listLima.appendChild(liTotalElement);
-  }
-};
+console.log(test);
 
 
 
-seattleStore.render();
-tokyoStore.render();
-dubaiStore.render();
-parisStore.render();
-limaStore.render();
+renderHeader();
+renderBody();
+renderFoot();
+renderAll();
 
