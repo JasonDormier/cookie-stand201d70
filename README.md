@@ -12,6 +12,7 @@
 
 
 ### Reflections and comments
+12/8/2020 Created objects for each store and populated the a table with the data that was generated from the previous lab.
 
 12/7/2020 Project started: created sales.html, index.html, style.css, and app.js. In app.js create objects for each store location of populated the lists with the given sales data using various functions and for loops.
 
