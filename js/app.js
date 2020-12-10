@@ -30,15 +30,14 @@ Citystore.prototype.getRandomNumber = function () {
 };
 
 Citystore.prototype.calculateHourlySales = function () {
-  //creating a loop to iterate and populate hourlySales
-  for (let i = 0; i < hours.length; i++) {
-    let x = this.hourlySales[i] = Math.trunc(this.getRandomNumber() * this.avg);
-    //adding the daily total.
-    this.dailyTotal += this.hourlySales[i];
 
-    return x;
-  }
+  let x = Math.trunc(this.getRandomNumber() * this.avg);
+  //adding the daily total.
+  this.dailyTotal += x;
+  this.hourlySales.push(x);
+  return x;
 };
+
 Citystore.prototype.hoursCalc = function () {
   this.hourlySales[0];
   console.log(this.hourlySales[0]);
@@ -68,7 +67,6 @@ Citystore.prototype.renderTable = function () {
   tdElement.textContent = this.dailyTotal;
   trElement.appendChild(tdElement);
 };
-
 
 function renderHeader() {
 
@@ -116,8 +114,25 @@ function renderFoot() {
   thElement.textContent = 'Hourly Totals';
   trElement.appendChild(thElement);
 
+  let totalofTotals = 0;
+  for (let i = 0; i < hours.length; i++) {
+    let allHourlyTotals = 0;
+
+    for (let j = 0; j < cityStores.length; j++) {
+      allHourlyTotals += cityStores[j].hourlySales[i];
+
+    }
+    totalofTotals += allHourlyTotals;
+    console.log(totalofTotals);
+
+    let tdElement = document.createElement('td');
+    tdElement.textContent = allHourlyTotals;
+    trElement.appendChild(tdElement);
+    console.log(allHourlyTotals);
+  }
+
   let tdElement = document.createElement('td');
-  //tdElement.textContent = calculateHourlySales();
+  tdElement.textContent = totalofTotals;
   trElement.appendChild(tdElement);
 }
 
@@ -133,19 +148,9 @@ function renderAll() {
   for (let i = 0; i < cityStores.length; i++) {
     cityStores[i].renderTable();
   }
+  renderFoot();
 }
-
-
-/* var hoursCalc = cityStores[0].hourlySales[0] + cityStores[1].hourlySales[0] + cityStores[2].hourlySales[0] + cityStores[3].hourlySales[0] + cityStores[4].hourlySales[0]; */
-
-const test = cityStores[0].hourlySales[0];
-
-console.log(test);
-
-
-
 renderHeader();
 renderBody();
-renderFoot();
 renderAll();
 
