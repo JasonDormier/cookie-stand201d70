@@ -139,13 +139,12 @@ section:last-of-type h2{
   width: 50%;
   font-size: 2em;
   font-family: 'Lato', sans-serif;
-  
 
 }
 
 section:last-of-type wrapper{
   display: block;
-  width: 75%;
+  width: 61%;
   margin:0 auto;
 }
 section:last-of-type wrapper div{
@@ -168,69 +167,15 @@ footer{
   margin-top: 30px;
 }
 
-/* main{
-
-  width: 75%;
-  margin: 30px auto;
-  border: black solid 1px;
+form{
+  width: 95%;
+  margin: 20px auto;
 }
 
-section{
-  width:  75%;
-  margin: 30px auto;
-  border: black solid 1px;
-
-}
-
-ul{
-  border: 5px solid black;
-  display: inline-block;
-  margin: 10px, 30px;
-  padding: 10px;
-}
-
-ol li{
-  display: inline-block;
-  width: 200px;
-  height: 70px;
-  border: black solid 1px;
-  font-weight: 300;
-  margin: 5px 30px;
-  text-align: center;
-}
-
-img{
+legend, form label, button{
   display: block;
-  margin: auto auto;
+  margin: 20px 0 0 20px;
 }
-
-section:nth-child(2) img{
-display: inline-block;
-margin: 30px;
-}
-
-section:nth-child(3) img{
-  display: inline-block;
-  margin: 15px;
-  right: 500px;
-  }
-
-  article{
-    display: inline;
-    width: 200px;
-    height: 70px;
-    border: black solid 1px;
-    margin: 30px;
-  }
-
-  footer{
-    width: 75%;
-    height: 200px;
-    border: black solid 1px;
-    margin: 0 auto;
-
-  }
-*/
 table{
   margin: 20px auto;
 }
