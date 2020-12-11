@@ -10,10 +10,11 @@
 
 * Math.trunc: <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/trunc>
 
-* w3schools <https://www.w3schools.com/>
-
+* w3schools <https://www.w3schools.com/>'
 
 ### Reflections and comments
+12/10/2020 adding form to sales.html. Adding the data to the bottom of the table and reseting the footer to include all the totals correctly.
+
 12/9/2020 finished the footer section of the table and adjusted some bugs in my js logic thanks to Seamus. Created the structure and css for index.html and sales.html
 
 12/8/2020 Created objects for each store and populated the a table with the data that was generated from the previous lab.
@@ -23,3 +24,4 @@
 ### Colaborators
 * Seamus Brown
 * Jason Quaglia
+

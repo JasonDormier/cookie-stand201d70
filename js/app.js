@@ -3,23 +3,22 @@
 //constructor funtions are object "factories"
 var hours = ['6am', '7am', '8am', '9am', '10am', '11am', '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm'];
 
-
-const listSeattle = document.getElementById('seattle');
-const listTokyo = document.getElementById('tokyo');
-const listDubai = document.getElementById('dubai');
-const listParis = document.getElementById('paris');
-const listLima = document.getElementById('lima');
-const storeTable = document.getElementById('table');
-let tbodyElement = '';
-
 const cityStores = [];
 
-function Citystore(name, min, max, avg, parentList) {
+//global varibles
+const storeTable = document.getElementById('table');
+const myForm = document.getElementById('form');
+let tbodyElement = document.createElement('tbody');
+let tfootElement = document.createElement('tfoot');
+
+// event listeners
+myForm.addEventListener('submit', handleSubmit);
+
+function Citystore(name, min, max, avg) {
   this.name = name;
   this.min = min;
   this.max = max;
   this.avg = avg;
-  this.parentList = parentList;
   this.hourlySales = [];
   this.dailyTotal = 0;
   cityStores.push(this);
@@ -38,14 +37,8 @@ Citystore.prototype.calculateHourlySales = function () {
   return x;
 };
 
-Citystore.prototype.hoursCalc = function () {
-  this.hourlySales[0];
-  console.log(this.hourlySales[0]);
-};
-
 Citystore.prototype.renderTable = function () {
   //create Row and append to the DOM
-
   let trElement = document.createElement('tr');
   tbodyElement.appendChild(trElement);
 
@@ -60,8 +53,8 @@ Citystore.prototype.renderTable = function () {
     tdElement = document.createElement('td');
     tdElement.textContent = this.calculateHourlySales();
     trElement.appendChild(tdElement);
-
   }
+
   //creating the daily totals column
   tdElement = document.createElement('td');
   tdElement.textContent = this.dailyTotal;
@@ -69,7 +62,6 @@ Citystore.prototype.renderTable = function () {
 };
 
 function renderHeader() {
-
   //creating the table head to sit inside table
   let theadElement = document.createElement('thead');
   storeTable.appendChild(theadElement);
@@ -89,22 +81,22 @@ function renderHeader() {
     thElement.textContent = hours[i];
     trElement.appendChild(thElement);
   }
+
   // adding daily totals onto the end of the table
   thElement = document.createElement('th');
   thElement.textContent = 'Daily Total';
   trElement.appendChild(thElement);
-
 }
 
 //creating a body to for the table
 function renderBody() {
-  tbodyElement = document.createElement('tbody');
+  tbodyElement;
   storeTable.appendChild(tbodyElement);
 }
 
 //creating a foot for the table
 function renderFoot() {
-  let tfootElement = document.createElement('tfoot');
+  tfootElement = document.createElement('tfoot');
   storeTable.appendChild(tfootElement);
 
   let trElement = document.createElement('tr');
@@ -120,15 +112,15 @@ function renderFoot() {
 
     for (let j = 0; j < cityStores.length; j++) {
       allHourlyTotals += cityStores[j].hourlySales[i];
-
     }
+
     totalofTotals += allHourlyTotals;
-    console.log(totalofTotals);
+    //console.log(totalofTotals);
 
     let tdElement = document.createElement('td');
     tdElement.textContent = allHourlyTotals;
     trElement.appendChild(tdElement);
-    console.log(allHourlyTotals);
+    //console.log(allHourlyTotals);
   }
 
   let tdElement = document.createElement('td');
@@ -136,21 +128,41 @@ function renderFoot() {
   trElement.appendChild(tdElement);
 }
 
+//creating an event handler to input data to the table
+function handleSubmit(event) {
+  event.preventDefault();
+
+  const name = event.target.name.value;
+  const min = event.target.min.value;
+  const max = event.target.max.value;
+  const avg = event.target.avg.value;
+
+  // will create a new instance of the store when we press submit
+  let newStore = new Citystore(name, min, max, avg);
+
+  //calling our new instance and prototype method
+  newStore.renderTable();
+
+  //clearing the tfoot table and rendering
+  storeTable.removeChild(tfootElement);
+  renderFoot();
+}
+
 //instaniations
-new Citystore('Seattle', 23, 65, 6.3, listSeattle);
-new Citystore('Tokyo', 3, 24, 1.2, listTokyo);
-new Citystore('Dubai', 11, 38, 3.7, listDubai);
-new Citystore('Paris', 20, 38, 2.3, listParis);
-new Citystore('Lima', 2, 16, 4.6, listLima);
+new Citystore('Seattle', 23, 65, 6.3);
+new Citystore('Tokyo', 3, 24, 1.2);
+new Citystore('Dubai', 11, 38, 3.7);
+new Citystore('Paris', 20, 38, 2.3);
+new Citystore('Lima', 2, 16, 4.6);
 
 
 function renderAll() {
+  renderHeader();
+  renderBody();
   for (let i = 0; i < cityStores.length; i++) {
     cityStores[i].renderTable();
   }
   renderFoot();
 }
-renderHeader();
-renderBody();
-renderAll();
 
+renderAll();
