@@ -11,9 +11,6 @@ const myForm = document.getElementById('form');
 let tbodyElement = document.createElement('tbody');
 let tfootElement = document.createElement('tfoot');
 
-// event listeners
-myForm.addEventListener('submit', handleSubmit);
-
 function Citystore(name, min, max, avg) {
   this.name = name;
   this.min = min;
@@ -29,7 +26,6 @@ Citystore.prototype.getRandomNumber = function () {
 };
 
 Citystore.prototype.calculateHourlySales = function () {
-
   let x = Math.trunc(this.getRandomNumber() * this.avg);
   //adding the daily total.
   this.dailyTotal += x;
@@ -43,23 +39,22 @@ Citystore.prototype.renderTable = function () {
   tbodyElement.appendChild(trElement);
 
   //create first column and append to the DOM
-  let thElement = document.createElement('th');
-  thElement.textContent = this.name;
-  trElement.appendChild(thElement);
+  renderElement('th', this.name, trElement);
 
   //iterate through hourly totals and append to DOM
-  let tdElement;
   for (let i = 0; i < hours.length; i++) {
-    tdElement = document.createElement('td');
-    tdElement.textContent = this.calculateHourlySales();
-    trElement.appendChild(tdElement);
+    renderElement('td', this.calculateHourlySales(), trElement);
   }
 
   //creating the daily totals column
-  tdElement = document.createElement('td');
-  tdElement.textContent = this.dailyTotal;
-  trElement.appendChild(tdElement);
+  renderElement('td', this.dailyTotal, trElement);
 };
+
+function renderElement(el, content, parentEl) {
+  let childEl = document.createElement(el);
+  childEl.textContent = content;
+  parentEl.appendChild(childEl);
+}
 
 function renderHeader() {
   //creating the table head to sit inside table
@@ -70,22 +65,16 @@ function renderHeader() {
   let trElement = document.createElement('tr');
   theadElement.appendChild(trElement);
 
-  //creating the th to go inside table row
-  let thElement = document.createElement('th');
-  thElement.textContent = '';
-  trElement.appendChild(thElement);
+  //creating the first th element to go inside table row
+  renderElement('th', '', trElement);
 
   //for loop to iterate through the hours array
   for (let i = 0; i < hours.length; i++) {
-    thElement = document.createElement('th');
-    thElement.textContent = hours[i];
-    trElement.appendChild(thElement);
+    renderElement('th', hours[i], trElement);
   }
 
   // adding daily totals onto the end of the table
-  thElement = document.createElement('th');
-  thElement.textContent = 'Daily Total';
-  trElement.appendChild(thElement);
+  renderElement('th', 'Daily Total', trElement);
 }
 
 //creating a body to for the table
@@ -102,9 +91,8 @@ function renderFoot() {
   let trElement = document.createElement('tr');
   tfootElement.appendChild(trElement);
 
-  let thElement = document.createElement('th');
-  thElement.textContent = 'Hourly Totals';
-  trElement.appendChild(thElement);
+  renderElement('th', 'Hourly Totals', trElement);
+
 
   let totalofTotals = 0;
   for (let i = 0; i < hours.length; i++) {
@@ -115,17 +103,12 @@ function renderFoot() {
     }
 
     totalofTotals += allHourlyTotals;
-    //console.log(totalofTotals);
 
-    let tdElement = document.createElement('td');
-    tdElement.textContent = allHourlyTotals;
-    trElement.appendChild(tdElement);
-    //console.log(allHourlyTotals);
+    //rendering the last box of totals.
+    renderElement('td', allHourlyTotals, trElement);
   }
 
-  let tdElement = document.createElement('td');
-  tdElement.textContent = totalofTotals;
-  trElement.appendChild(tdElement);
+  renderElement('td', totalofTotals, trElement);
 }
 
 //creating an event handler to input data to the table
@@ -133,9 +116,9 @@ function handleSubmit(event) {
   event.preventDefault();
 
   const name = event.target.name.value;
-  const min = event.target.min.value;
-  const max = event.target.max.value;
-  const avg = event.target.avg.value;
+  const min = parseInt(event.target.min.value);
+  const max = parseInt(event.target.max.value);
+  const avg = parseInt(event.target.avg.value);
 
   // will create a new instance of the store when we press submit
   let newStore = new Citystore(name, min, max, avg);
@@ -166,3 +149,5 @@ function renderAll() {
 }
 
 renderAll();
+// event listeners
+myForm.addEventListener('submit', handleSubmit);
